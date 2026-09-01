@@ -1,0 +1,20 @@
+on: # [push]
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    name:    deploy2nekoweb
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        
+      # your build step here
+        
+      - name: deploy2nekoweb
+        uses: indiefellas/deploy2nekoweb@main
+        with:
+          nekoweb-api-key: ${{ secrets.NEKOWEB_API_KEY }}
+          nekoweb-domain: 'nyxie.nekoweb.org'
+          nekoweb-username: 'nyxie'
+          directory: 'nyxie.nekoweb.org'
