@@ -1,0 +1,124 @@
+<!--
+# ==========================================
+#              Gallery CURL CLI
+# ==========================================
+URL="https://nyxie.nekoweb.org/assets/cli"
+# If testing locally
+if curl -s -I "http://127.0.0.1:5500/assets/cli" | grep -q "HTTP/.* 200"; then
+	URL="http://127.0.0.1:5500/assets/cli"
+fi
+# Run the script with the arguments
+if command -v curl >/dev/null 2>&1; then
+	curl -sSL "$URL" | bash -s -- "$@"
+fi
+exit 0
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name   ="viewport"    content="width=device-width, initial-scale=1.0">
+  <meta name   ="description" content="A beatiful interactive Web-based image Gallery in Cappuccin Mocha colors.">
+  <meta name   ="theme-color" content="#cba6f7">
+
+  <meta property="og:image"     content="https://nyxie.nekoweb.org/assets/images/image.png">
+	<meta name    ="twitter:card" content="summary_large_image"> <!-- Creates big boy embed image -->
+
+  <title>Gallery</title>
+  <link rel="icon" type="image/svg+xml" href="./assets/gallery-svgrepo.svg" sizes="any">
+
+  <link rel="stylesheet" href="./styles.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+</head>
+	<body>
+		<header>
+			<nav class="nav-pill">
+				<a href="#folders" class="tab active">
+					<span class="label">Folders</span>
+				</a>
+				<a href="#gallery" class="tab">
+					<span class="label">Gallery</span>
+				</a>
+				<a href="#setting" class="tab">
+					<span class="label">Settings</span>
+				</a>
+			</nav>
+
+			<search class="search-pill">
+				<i class="fas fa-search"></i>
+				<input type="text" class="search-input" placeholder="Search..." />
+				<button class="search-submit" type="button">
+					<i class="fas fa-angles-right"></i>
+				</button>
+			</search>
+
+			<sort class="sort-pill">
+				<div class="sort-slider">
+					<span></span>
+				</div>
+				<button class="sort-option active" data-sort="name">
+					<span><i class="fas fa-arrow-up"></i>Name</span>
+				</button>
+				<button class="sort-option" data-sort="size">
+					<span><i class="fas fa-arrow-up"></i>Size</span>
+				</button>
+				<button class="sort-option" data-sort="date">
+					<span><i class="fas fa-arrow-up"></i>Date</span>
+				</button>
+				<button class="sort-option" data-sort="type">
+					<span><i class="fa-solid fa-shuffle"></i>Random</span>
+				</button>
+			</sort>
+		</header>
+
+
+		<div class="content">
+			<div class="folder-grid">
+
+				<!-- Single Mockup Folder Marquee Test -->
+				<div class="folder-card" style="--accent: var(--ctp-mauve-rgb);">
+					<info class="folder-tab">
+						<span class="file-count">42 Files</span>
+					</info>
+					<div class="folder-body">
+						<div class="folder-preview">
+							<img src="https://images.unsplash.com/photo-1513694203232-719a280e022f?w=400&auto=format&fit=crop&q=60" alt="Cozy Room Preview">
+						</div>
+						<info class="folder-info">
+							<h3 class="folder-title">
+								<span>Cozy Rooms but im too drunk on motor oil to gamble away all my money in a roblox casino</span>
+							</h3>
+							<span class="folder-size">148 MB</span>
+						</info>
+					</div>
+				</div>
+			</div>
+
+			<div class="gallery-grid">
+				<div class="filter-panel">
+					<div class="chip-container">
+						<button class="chip active" data-folder="all">
+							<span>All Images</span>
+						</button>
+					</div>
+					<span class="image-count">0 Images</span>
+				</div>
+
+				<div class="gallery-masonry">
+				</div>
+			</div>
+
+			<div class="settings-page">
+			</div>
+		</div>
+
+		<div class="full-screen">
+			<img class="full-screen-img" src="" alt="">
+		</div>
+
+		<script type="module" src="./app.js"></script>
+		<script src="./assets/settings/parser.js"></script>
+	</body>
+</html>

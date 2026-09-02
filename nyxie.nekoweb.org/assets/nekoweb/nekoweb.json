@@ -1,0 +1,29 @@
+{
+  "movements": {
+    "/assets/nekoweb/elements.css": "/elements.css"
+  },
+  "exclusions": [
+    ".git",
+    ".github",
+    "readme*",
+    "!Backup",
+    "!Plugin",
+    "license*",
+    ".gitignore",
+    "assets/nekoweb/",
+    "assets/images/image?*.png"
+  ],
+  "renames": {
+    "404.html": "not_found.html"
+  },
+  "replacements": {
+    "https://nyxie.nekoweb.org/assets/construction-vecteezy.svg": "https://nyxie.nekoweb.org/assets/construction-vecteezy.svg",
+    "https://nyxie.nekoweb.org/assets/images/voahOhVoah.png"    : "https://nyxie.nekoweb.org/assets/images/voahOhVoah.png",
+    "https://nyxie.nekoweb.org/assets/gallery-svgrepo.svg"      : "https://nyxie.nekoweb.org/assets/gallery-svgrepo.svg",
+    "https://nyxie.nekoweb.org/assets/images/image.png"         : "https://nyxie.nekoweb.org/assets/images/image.png",
+    "https://nyxie.nekoweb.org/assets/cli"                      : "https://nyxie.nekoweb.org/assets/cli",
+    "https://nyxie.nekoweb.org/server.py"                       : "https://nyxie.nekoweb.org/server.py",
+    "https://nyxie.nekoweb.org"                                : "https://nyxie.nekoweb.org",
+    "nyxie.nekoweb.org"                                         : "nyxie.nekoweb.org"
+  }
+}

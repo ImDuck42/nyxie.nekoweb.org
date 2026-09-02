@@ -1,0 +1,432 @@
+#!/usr/bin/env bash
+# ==============================================================================
+#  ImDuck42 / Gallery - CLI Runner
+#  - curl https://nyxie.nekoweb.org | bash
+#  - curl https://nyxie.nekoweb.org | bash -s -- -h
+# ==============================================================================
+
+# -- CONFIGURATION -------------------------------------------------------------
+HTTP_PORT="${HTTP_PORT:-${PORT:-4269}}"
+HTTPS_PORT="${HTTPS_PORT:-4270}"
+HOST="${HOST:-}"
+
+SITE_URL="https://nyxie.nekoweb.org"
+SERVER_PY="https://nyxie.nekoweb.org/server.py"
+
+# -- STYLING & COLORS ----------------------------------------------------------
+init_colors() {
+  ESC=$'\033'
+  CLR_RESET="${ESC}[0m"
+  CLR_BOLD="${ESC}[1m"
+  CLR_DIM="${ESC}[2m"
+
+  # Catppuccin Mocha Colors
+  MOCHA_ROSEWATER="${ESC}[38;2;245;224;220m" #f5e0dc
+  MOCHA_FLAMINGO="${ESC}[38;2;242;205;205m"  #f2cdcd
+  MOCHA_PINK="${ESC}[38;2;245;194;231m"      #f5c2e7
+  MOCHA_MAUVE="${ESC}[38;2;203;166;247m"     #cba6f7
+  MOCHA_RED="${ESC}[38;2;243;139;168m"       #f38ba8
+  MOCHA_PEACH="${ESC}[38;2;250;179;135m"     #fab387
+  MOCHA_YELLOW="${ESC}[38;2;249;226;175m"    #f9e2af
+  MOCHA_GREEN="${ESC}[38;2;166;227;161m"     #a6e3a1
+  MOCHA_TEAL="${ESC}[38;2;148;226;213m"      #94e2d5
+  MOCHA_SKY="${ESC}[38;2;137;220;235m"       #89dceb
+  MOCHA_SAPPHIRE="${ESC}[38;2;116;199;236m"  #74c7ec
+  MOCHA_BLUE="${ESC}[38;2;137;180;250m"      #89b4fa
+  MOCHA_LAVENDER="${ESC}[38;2;180;190;254m"  #b4befe
+  MOCHA_TEXT="${ESC}[38;2;205;214;244m"      #cdd6f4
+  MOCHA_SUBTEXT="${ESC}[38;2;166;173;200m"   #a6adc8
+  MOCHA_OVERLAY="${ESC}[38;2;108;112;134m"   #6c7086
+}
+
+# -- MAIN UTILITIES ------------------------------------------------------------
+cleanup_and_exit() {
+  printf "\n\n"
+  printf "  ${MOCHA_PEACH}${CLR_BOLD}__(•)> ${MOCHA_LAVENDER}Byee!${CLR_RESET}\n"
+  printf "  ${MOCHA_PEACH}${CLR_BOLD}\___)  ${MOCHA_LAVENDER}See you next time${CLR_RESET}\n"
+  exit 0
+}
+trap cleanup_and_exit INT
+
+tty_read() {
+  if [ -e /dev/tty ]; then read -r "$@" < /dev/tty; else read -r "$@"; fi
+}
+
+resolve_path() {
+  local target="$1"
+  if [ -z "$target" ]; then
+    printf "%s\n" "$PWD"
+    return
+  fi
+  
+  target="${target/#\~/$HOME}"
+  mkdir -p "$target" 2>/dev/null
+  
+  if [ -d "$target" ]; then
+    (cd "$target" && pwd)
+  else
+    printf "%s\n" "$target"
+  fi
+}
+
+get_python_cmd() {
+  if   command -v python3 >/dev/null 2>&1; then printf "python3\n"
+  elif command -v python  >/dev/null 2>&1; then printf "python\n"
+  else printf "\n"; fi
+}
+
+get_local_ip() {
+  local ip=""
+  if [ -z "$ip" ] && command -v ip >/dev/null 2>&1; then
+    ip=$(ip route get 8.8.8.8 2>/dev/null | awk '{for(i=1;i<=NF;i++) if($i=="src") print $(i+1)}')
+  fi
+  if [ -z "$ip" ] && command -v ipconfig >/dev/null 2>&1 && command -v route >/dev/null 2>&1; then
+    local iface
+    iface=$(route -n get default 2>/dev/null | awk '/interface:/{print $2}')
+    if [ -n "$iface" ]; then
+      ip=$(ipconfig getifaddr "$iface" 2>/dev/null)
+    fi
+  fi
+  
+  if [ -z "$ip" ]; then
+    ip="127.0.0.1"
+  fi
+
+  printf "%s\n" "$ip"
+}
+
+open_url() {
+  local url="$1"
+  if   command -v open     >/dev/null 2>&1; then open     "$url" >/dev/null 2>&1 &
+  elif command -v xdg-open >/dev/null 2>&1; then xdg-open "$url" >/dev/null 2>&1 &
+  elif command -v python3  >/dev/null 2>&1; then python3  -m webbrowser "$url" >/dev/null 2>&1 &
+  elif command -v python   >/dev/null 2>&1; then python   -m webbrowser "$url" >/dev/null 2>&1 &
+  fi
+}
+
+perform_download() {
+  local target_dir="$1"
+  if command -v curl >/dev/null 2>&1; then
+    curl -sSL "$SERVER_PY" -o "${target_dir}/server.py"
+    return $?
+  fi
+  return 1
+}
+
+# -- USER INTERFACE ------------------------------------------------------------
+# Generates a dynamic dot-padded row: │  [*]  Server ............... [ OK ]  │
+ui_box_row() {
+  local icon="$1" iclr="$2" label="$3" bracket="$4" bclr="$5"
+  
+  local border="${MOCHA_OVERLAY}│${CLR_RESET}"
+  local styled_icon="${iclr}${CLR_BOLD}${icon}${CLR_RESET}"
+  local styled_bracket="${bclr}${bracket}${CLR_RESET}"
+  
+  local max_len=55
+  local content_len=$((${#label} + ${#bracket} + 2))
+  local dots=""
+  
+  if [[ $((max_len - content_len)) -gt 0 ]]; then
+    local spaces=$(printf "%$((max_len - content_len))s" "")
+    dots="${spaces// /.}"
+  fi
+
+  printf "  %s  %s  %s ${MOCHA_OVERLAY}%s${CLR_RESET} %s  %s\n" \
+    "$border" "$styled_icon" "$label" "$dots" "$styled_bracket" "$border"
+}
+
+# Generates an info-padded row: │  :::  Path         /var/www/dir      │
+ui_info_row() {
+  local icon="$1" iclr="$2" label="$3" value="$4" vclr="$5"
+  
+  local border="${MOCHA_OVERLAY}│${CLR_RESET}"
+  local styled_icon="${iclr}${CLR_BOLD}${icon}${CLR_RESET}"
+  
+  printf "  %s  %s  %-15s${vclr}%-40.40s${CLR_RESET}  %s\n" \
+    "$border" "$styled_icon" "$label" "$value" "$border"
+}
+
+# Prints the top border of the menu
+ui_menu_header() {
+  local title="$1"
+  local inner_width=${2:-64}
+  
+  local title_str="── ${title} "
+  local fill_len=$(( inner_width - ${#title_str} ))
+  local spaces=$(printf "%${fill_len}s" "")
+  local dashes="${spaces// /─}"
+  
+  printf "  ${MOCHA_OVERLAY}╭%s%s╮${CLR_RESET}\n" "$title_str" "$dashes"
+}
+
+# Prints a menu row with calculated padding
+ui_menu_row() {
+  local idx="$1" idx_clr="$2" title="$3" desc="$4" extra="$5" extra_clr="$6"
+  local title_style="${7:-$CLR_BOLD}" # Defaults to Bold if not provided
+  local inner_width=${8:-64}
+  local title_width=${9:-17}          # Space reserved for the title column
+
+  # Formatting with colors
+  local border="${MOCHA_OVERLAY}│${CLR_RESET}"
+  local c_idx="${idx_clr}${CLR_BOLD}[${idx}]${CLR_RESET}"
+  local c_title="${title_style}${title}${CLR_RESET}"
+  local c_desc="${MOCHA_SUBTEXT}${desc}${CLR_RESET}"
+  local c_extra="${extra_clr}${extra}${CLR_RESET}"
+
+  # Padding after the title (aligns the descriptions)
+  local pad_title_len=$(( title_width - ${#title} ))
+  [[ $pad_title_len -lt 1 ]] && pad_title_len=1
+  local pad_title=$(printf "%${pad_title_len}s" "")
+
+  # Padding after the description (right-aligns the extra info)
+  # 9 = 2 (left gap) + 3 (idx size) + 2 (gap) + 2 (right gap)
+  local current_len=$(( 9 + ${#title} + pad_title_len + ${#desc} ))
+  local pad_desc_len=$(( inner_width - current_len - ${#extra} ))
+  [[ $pad_desc_len -lt 1 ]] && pad_desc_len=1
+  local pad_desc=$(printf "%${pad_desc_len}s" "")
+
+  # printf to build the spaced row
+  printf "  %s  %s  %s%s%s%s%s  %s\n" \
+    "${border}" "${c_idx}" "${c_title}" "${pad_title}" "${c_desc}" "${pad_desc}" "${c_extra}" "${border}"
+}
+
+# Prints the bottom border of the menu
+ui_menu_footer() {
+  local inner_width=${1:-64}
+  local spaces=$(printf "%${inner_width}s" "")
+  local dashes="${spaces// /─}"
+  
+  printf "  ${MOCHA_OVERLAY}╰%s╯${CLR_RESET}\n" "$dashes"
+}
+
+print_banner() {
+  clear 2>/dev/null || true
+  
+  local link_text="nyxie.nekoweb.org"
+  local link="${ESC}]8;;${SITE_URL}${ESC}\\${link_text}${ESC}]8;;${ESC}\\"
+  
+  # Styling aliases to render ascii art
+  local c0="${MOCHA_OVERLAY}"
+  local c1="${MOCHA_MAUVE}"
+  local c2="${MOCHA_PINK}"
+  local c3="${MOCHA_LAVENDER}"
+  local c4="${MOCHA_SAPPHIRE}"
+  local c5="${MOCHA_SKY}"
+  local c6="${MOCHA_TEAL}"
+  local c7="${MOCHA_GREEN}"
+  local r="${CLR_RESET}"
+  local v="${c0}│${r}"
+
+  local padding=$(printf "%$((39 - ${#link_text}))s" "")
+  local dots="${MOCHA_ROSEWATER}● ${MOCHA_FLAMINGO}● ${c2}● ${c1}● ${c3}● ${c4}● ${c5}● ${c6}● ${c7}● ${MOCHA_YELLOW}● ${MOCHA_PEACH}●${r}"
+  local div="${c1}────────────────${c3}────────────────${c4}────────────────${c6}────────────────${r}"
+
+  printf "\n"
+  printf "  ${c0}╭────────────────────────────────────────────────────────────────╮${r}\n"
+  printf "  $v   ${c1} ██████╗ ${c2} █████╗ ${c3}██╗  ${c4}𝐂𝐔𝐑██╗     ${c5}███████╗${c6}██████╗ ${c7}██╗   ██╗${r}   $v\n"
+  printf "  $v   ${c1}██╔════╝ ${c2}██╔══██╗${c3}██║     ${c4}██║     ${c5}██╔════╝${c6}██╔══██╗${c7}╚██╗ ██╔╝${r}   $v\n"
+  printf "  $v   ${c1}██║  ███╗${c2}███████║${c3}██║     ${c4}██║     ${c5}█████╗  ${c6}██████╔╝${c7} ╚████╔╝ ${r}   $v\n"
+  printf "  $v   ${c1}██║   ██║${c2}██╔══██║${c3}██║     ${c4}██║     ${c5}██╔══╝  ${c6}██╔══██╗${c7}  ╚██╔╝  ${r}   $v\n"
+  printf "  $v   ${c1}╚██████╔╝${c2}██║  ██║${c3}███████╗${c4}███████╗${c5}███████╗${c6}██║  ██║${c7}   ██║   ${r}   $v\n"
+  printf "  $v   ${c1} ╚═════╝ ${c2}╚═╝  ╚═╝${c3}╚══════╝${c4}╚══════╝${c5}╚══════╝${c6}╚═╝  ╚═╝${c7}   ╚═╝   ${r}   $v\n"
+  printf "  ${c0}├${div}${c0}┤${r}\n"
+  printf "  $v  ${dots}${padding}${c4}${link}${r}  $v\n"
+  printf "  ${c0}╰────────────────────────────────────────────────────────────────╯${r}\n"
+}
+
+# -- MAIN FUNCTIONS ------------------------------------------------------------
+free_port() {
+  local pids
+  local port="$1"
+  if command -v lsof >/dev/null 2>&1; then
+    pids=$(lsof -ti TCP:"$port" -sTCP:LISTEN 2>/dev/null)
+    if [ -n "$pids" ]; then
+      ui_box_row "[!]" "$MOCHA_YELLOW" "Port $port in use" "[ Reclaiming ]" "$MOCHA_RED"
+      kill -9 $pids 2>/dev/null || true
+      sleep 0.5
+    fi
+  fi
+}
+
+quick_start() {
+  local target_dir=$(resolve_path "$1")
+
+  printf "\n"
+  printf "  ${MOCHA_MAUVE}${CLR_BOLD}[>] Initializing Launch Sequence${CLR_RESET}\n"
+  printf "  ${MOCHA_OVERLAY}╭────────────────────────────────────────────────────────────────╮${CLR_RESET}\n"
+
+  free_port "$HTTP_PORT"
+  free_port "$HTTPS_PORT"
+
+  if [ ! -f "${target_dir}/server.py" ]; then
+    ui_box_row "[*]" "$MOCHA_YELLOW" "Server file" "[ Downloading ]" "$MOCHA_YELLOW"
+    
+    if perform_download "$target_dir"; then
+      ui_box_row "[*]" "$MOCHA_GREEN" "Server file" "[ Installed ]" "$MOCHA_GREEN"
+    else
+      ui_box_row "[!]" "$MOCHA_RED" "Server file" "[ Failed ]" "$MOCHA_RED"
+      printf "  ${MOCHA_OVERLAY}╰────────────────────────────────────────────────────────────────╯${CLR_RESET}\n\n"
+      return 1
+    fi
+  else
+    perform_download "$target_dir"
+    ui_box_row "[*]" "$MOCHA_GREEN" "Server file" "[ Updated ]" "$MOCHA_GREEN"
+  fi
+
+  PY_CMD=$(get_python_cmd)
+  if [ -z "$PY_CMD" ]; then
+    ui_box_row "[!]" "$MOCHA_RED" "Python Runtime" "[ Not Found ]" "$MOCHA_RED"
+    printf "  ${MOCHA_OVERLAY}╰────────────────────────────────────────────────────────────────╯${CLR_RESET}\n\n"
+    return 1
+  else
+    ui_box_row "[*]" "$MOCHA_GREEN" "Python Runtime" "[ $PY_CMD ]" "$MOCHA_GREEN"
+  fi
+
+  ui_box_row "[*]" "$MOCHA_LAVENDER" "Web Client" "[ Opening ]" "$MOCHA_LAVENDER"
+  open_url "$SITE_URL"
+
+  local local_ip="${HOST:-$(get_local_ip)}"
+	local http_route="http://${local_ip}:${HTTP_PORT}"
+	local https_route="https://${local_ip}:${HTTPS_PORT}"
+
+  printf "  ${MOCHA_OVERLAY}├────────────────────────────────────────────────────────────────┤${CLR_RESET}\n"
+  
+  ui_info_row ":::" "$MOCHA_PEACH" "Serving Path" "$target_dir" "$MOCHA_YELLOW"
+  ui_info_row ":::" "$MOCHA_GREEN" "HTTP  Route"  "$http_route" "$MOCHA_SAPPHIRE"
+  ui_info_row ":::" "$MOCHA_GREEN" "HTTPS Route" "$https_route" "$MOCHA_SAPPHIRE"
+
+
+  printf "  ${MOCHA_OVERLAY}│${CLR_RESET}  ${MOCHA_OVERLAY}${CLR_BOLD}(i)${CLR_RESET}  Press ${MOCHA_RED}Ctrl + C${CLR_RESET} at any time to return to menu.            ${MOCHA_OVERLAY}│${CLR_RESET}\n"
+  printf "  ${MOCHA_OVERLAY}╰────────────────────────────────────────────────────────────────╯${CLR_RESET}\n\n"
+  
+  trap ':' INT
+  (cd "$target_dir" && "$PY_CMD" server.py "$target_dir" "$HTTP_PORT" "$HTTPS_PORT")
+  trap cleanup_and_exit INT
+
+  printf "\n"
+  printf "  ${MOCHA_YELLOW}${CLR_BOLD}[-]${CLR_RESET} Server stopped.\n"
+  printf "  ${MOCHA_SUBTEXT}Press ${CLR_BOLD}[Enter]${CLR_RESET}${MOCHA_SUBTEXT} to return to menu...${CLR_RESET}"
+  tty_read
+}
+
+download_server() {
+  local target_dir=$(resolve_path "$1")
+
+  printf "\n"
+  printf "  ${MOCHA_MAUVE}${CLR_BOLD}[>] Download Sequence${CLR_RESET}\n"
+  printf "  ${MOCHA_OVERLAY}╭────────────────────────────────────────────────────────────────╮${CLR_RESET}\n"
+  
+  ui_box_row "[*]" "$MOCHA_YELLOW" "Target Path" "[ $target_dir ]" "$MOCHA_YELLOW"
+  ui_box_row "[*]" "$MOCHA_BLUE"   "Server file" "[ Downloading ]" "$MOCHA_BLUE"
+  
+  if perform_download "$target_dir" && [ -f "${target_dir}/server.py" ]; then
+    ui_box_row "[*]" "$MOCHA_GREEN" "Server file" "[ Installed ]" "$MOCHA_GREEN"
+  else
+    ui_box_row "[!]" "$MOCHA_RED"   "Server file" "[ Failed ]"    "$MOCHA_RED"
+  fi
+
+  printf "  ${MOCHA_OVERLAY}╰────────────────────────────────────────────────────────────────╯${CLR_RESET}\n"
+}
+
+open_web_app() {
+  printf "\n"
+  printf "  ${MOCHA_MAUVE}${CLR_BOLD}[>] Website Launch Sequence${CLR_RESET}\n"
+  printf "  ${MOCHA_OVERLAY}╭────────────────────────────────────────────────────────────────╮${CLR_RESET}\n"
+  
+  ui_box_row "[*]" "$MOCHA_LAVENDER" "Target URL" "[ $SITE_URL ]" "$MOCHA_LAVENDER"
+  ui_box_row "[*]" "$MOCHA_GREEN"    "Web Client" "[ Opening ]"   "$MOCHA_GREEN"
+  
+  printf "  ${MOCHA_OVERLAY}╰────────────────────────────────────────────────────────────────╯${CLR_RESET}\n"
+  
+  open_url "$SITE_URL"
+}
+
+show_help() {
+  print_banner
+  printf "  ${MOCHA_MAUVE}${CLR_BOLD}Usage:${CLR_RESET}\n"
+  printf "    ${MOCHA_GREEN}curl https://nyxie.nekoweb.org | bash ${CLR_RESET}\n"
+  printf "    ${MOCHA_GREEN}curl https://nyxie.nekoweb.org | bash${CLR_RESET} ${MOCHA_TEAL}-s -- [OPTION]${CLR_RESET} ${MOCHA_PEACH}[ARGUMENT]${CLR_RESET}\n\n"
+  printf "  ${MOCHA_MAUVE}${CLR_BOLD}Options:${CLR_RESET}\n"
+  printf "    ${MOCHA_TEAL}-s, --start    ${MOCHA_PEACH}[path]${CLR_RESET}  ${MOCHA_TEXT}Start server in ${MOCHA_PEACH}[path]${MOCHA_TEXT} (or ./) & open site${CLR_RESET}\n"
+  printf "    ${MOCHA_TEAL}-d, --download ${MOCHA_PEACH}[path]${CLR_RESET}  ${MOCHA_TEXT}Download server.py into ${MOCHA_PEACH}[path]${MOCHA_TEXT} (or ./)${CLR_RESET}\n"
+  printf "    ${MOCHA_TEAL}-o, --open${CLR_RESET}             ${MOCHA_TEXT}Open Gallery website in default browser${CLR_RESET}\n"
+  printf "    ${MOCHA_TEAL}-h, --help${CLR_RESET}             ${MOCHA_TEXT}Show this help message${CLR_RESET}"
+}
+
+# -- ARGUMENTS & MENU ----------------------------------------------------------
+parse_args() {
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      -s|--start)
+        local target="."
+        if [[ -n "$2" && "$2" != -* ]]; then target="$2"; shift; fi
+        quick_start "$target"
+        exit 0 ;;
+      -d|--download)
+        local target="."
+        if [[ -n "$2" && "$2" != -* ]]; then target="$2"; shift; fi
+        download_server "$target"
+        exit 0 ;;
+      -o|--open)
+        open_web_app
+        exit 0 ;;
+      -h|--help)
+        show_help
+        exit 0 ;;
+      *)
+        printf "  ${MOCHA_RED}[!] Unknown parameter: %s${CLR_RESET}\n" "$1"
+        show_help
+        exit 1 ;;
+    esac
+    shift
+  done
+}
+
+main_menu() {
+  while true; do
+    print_banner
+    
+    ui_menu_header "Actions"
+    ui_menu_row "1" "$MOCHA_MAUVE"    "Quick Start"     "Launch server & open gallery"   "[path]"  "$MOCHA_OVERLAY"
+    ui_menu_row "2" "$MOCHA_BLUE"     "Download Server" "Save server.py to local folder" "[path]"  "$MOCHA_OVERLAY"
+    ui_menu_row "3" "$MOCHA_SAPPHIRE" "Open Website"    "Launch browser interface"       "__(•)>"  "$MOCHA_PEACH"
+    ui_menu_row "0" "$MOCHA_RED"      "Exit"            "Close CLI launcher"             "\\___) " "$MOCHA_PEACH" "$MOCHA_SUBTEXT"
+    ui_menu_footer
+
+    printf "  ${MOCHA_MAUVE}╭─[${MOCHA_LAVENDER} gallery@$(pwd) ${MOCHA_MAUVE}]${CLR_RESET}\n"
+    printf "  ${MOCHA_MAUVE}╰─${MOCHA_PEACH}❯${MOCHA_YELLOW}❯${MOCHA_GREEN}❯ ${MOCHA_TEXT}Select [0-3]: ${CLR_RESET}"
+    
+    tty_read raw_input
+
+    local choice=$(printf "%s\n" "$raw_input" | awk '{print $1}')
+    local arg=$(printf "%s\n" "$raw_input" | cut -d' ' -f2-)
+    [ "$choice" = "$arg" ] && arg=""
+
+    case "$choice" in
+      1)
+        quick_start "$arg" ;;
+      2)
+        download_server "$arg"
+        printf "  ${MOCHA_SUBTEXT}Press ${CLR_BOLD}[Enter]${CLR_RESET}${MOCHA_SUBTEXT} to continue...${CLR_RESET}"
+        tty_read ;;
+      3)
+        open_web_app
+        printf "  ${MOCHA_SUBTEXT}Press ${CLR_BOLD}[Enter]${CLR_RESET}${MOCHA_SUBTEXT} to continue...${CLR_RESET}"
+        tty_read ;;
+      0|q|Q|exit)
+        cleanup_and_exit ;;
+      *)
+        printf "\n"
+        printf "  ${MOCHA_RED}${CLR_BOLD}[!]${CLR_RESET}${MOCHA_RED} Invalid selection, please try again.${CLR_RESET}\n"
+        sleep 1 ;;
+    esac
+  done
+}
+
+# -- ENTRY POINT ---------------------------------------------------------------
+init_colors
+if [ $# -gt 0 ]; then
+  parse_args "$@"
+else
+  main_menu
+fi

@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name   ="viewport"    content="width=device-width, initial-scale=1.0">
+	<meta name   ="description" content="404 - Site Not Found">
+	<meta name   ="theme-color" content="#cba6f7">
+
+  <meta property="og:image"     content="https://nyxie.nekoweb.org/assets/images/voahOhVoah.png">
+	<meta name    ="twitter:card" content="summary_large_image"> <!-- Creates big boy embed image -->
+
+	<title>404 Not Found</title>
+  <link rel="icon" type="image/svg+xml" href="https://nyxie.nekoweb.org/assets/gallery-svgrepo.svg" sizes="any">
+	<link rel="stylesheet"                href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+	
+	<style>
+		/* =============== ROOT VARIABLES =============== */
+		:root {
+			/* Backgrounds */
+			--ctp-crust-rgb:  17, 17, 27;
+			--ctp-mantle-rgb: 24, 24, 37;
+
+			/* Surfaces */
+			--ctp-surface0-rgb: 49, 50, 68;
+			--ctp-surface1-rgb: 69, 71, 90;
+			--ctp-surface2-rgb: 88, 91, 112;
+
+			/* Text */
+			--ctp-subtext0-rgb: 166, 173, 200;
+			--ctp-text-rgb:     205, 214, 244;
+
+			/* Accents */
+			--ctp-peach-rgb: 250, 179, 135;
+			--ctp-red-rgb:   243, 139, 168;
+		}
+
+		/* =============== GENERAL STYLING =============== */
+		*, *::before, *::after {
+			box-sizing: border-box;
+			margin:     0;
+		}
+
+		html, body {
+			height:                      100%;
+			background-color:            rgb(var(--ctp-crust-rgb));
+			color:                       rgb(var(--ctp-text-rgb));
+			font-weight:                 bold;
+			font-family:                 sans-serif;
+			user-select:                 none;
+			-webkit-tap-highlight-color: transparent;
+		}
+
+		body {
+			display:        flex;
+			flex-direction: column;
+			padding:        10px;
+		}
+
+		.content {
+			position:         relative;
+			overflow:         hidden;
+			background-color: rgb(var(--ctp-mantle-rgb));
+			border-radius:    10px;
+			flex:             1;
+			display:          flex;
+			align-items:      center;
+			justify-content:  center;
+			padding:          20px;
+
+			.construction-svg {
+				bottom:    0;
+				width:    100%;
+				position: absolute;
+			}
+	
+			#status-code {
+				top:            0;
+				position:       absolute;
+				font-size:      42vw;
+				line-height:    0.85;
+				font-weight:    900;
+				color:          rgba(var(--ctp-surface0-rgb), 0.25);
+				pointer-events: none;
+	
+				animation:        wave 15s ease-in-out infinite;
+				transform-origin: top center;
+			}
+		}
+
+		/* =============== STATUS CARD =============== */
+		.status-card {
+			z-index:        1;
+			max-width:      520px;
+			display:        flex;
+			flex-direction: column;
+			cursor:         pointer;
+			transition:     transform 0.2s cubic-bezier(0.35, 1.55, 0.65, 1);
+			animation:      pop-in    0.3s cubic-bezier(0.35, 1.55, 0.65, 1);
+
+			.status-tab {
+				margin-bottom:    -1px;
+				align-self:       flex-start;
+				background-color: rgb(var(--ctp-surface1-rgb));
+				color:            rgb(var(--ctp-red-rgb));
+				font:             800  0.85rem sans-serif;
+				padding:          6px  24px;
+				border-radius:    12px 12px 0 0;
+				transform:        skewX(-20deg)
+				                  translateX(5px);
+				transition:       all 0.2s ease;
+
+				#tab-text {
+					display:     inline-flex;
+					align-items: center;
+					gap:         10px;
+					transform:   skewX(20deg);
+				}
+			}
+
+			.status-body {
+				background-color: rgb(var(--ctp-surface0-rgb));
+				border:           4px  solid rgb(var(--ctp-surface1-rgb));
+				border-radius:    0    18px 18px 18px;
+				padding:          36px 32px;
+				display:          flex;
+				flex-direction:   column;
+				align-items:      center;
+				text-align:       center;
+				gap:              16px;
+				box-shadow:       6px 6px 0 rgb(var(--ctp-crust-rgb));
+				transition:       all 0.2s ease;
+			}
+
+			.status-icon-box {
+				display:          flex;
+				align-items:      center;
+				justify-content:  center;
+				width:            76px;
+				height:           76px;
+				border-radius:    16px;
+				background-color: rgb(var(--ctp-mantle-rgb));
+				border:           3px solid rgb(var(--ctp-red-rgb));
+				color:            rgb(var(--ctp-red-rgb));
+				font-size:        2.5rem;
+				box-shadow:       4px       4px 0 rgb(var(--ctp-crust-rgb));
+				transition:       transform 0.2s  cubic-bezier(0.35, 1.55, 0.65, 1);
+			
+				& > .fa-compass {
+          animation: rotate 5s cubic-bezier(0.35, 1.55, 0.65, 1) infinite;
+				}
+			}
+
+			#status-title {
+				font:       800 1.6rem sans-serif;
+				color:      rgb(var(--ctp-text-rgb));
+				transition: color 0.2s ease;
+			}
+
+			#status-description {
+				color:       rgb(var(--ctp-subtext0-rgb));
+				font:        600 0.95rem sans-serif;
+				line-height: 1.4;
+			}
+
+			.button-group {
+				display:         flex;
+				flex-wrap:       wrap;
+				gap:             16px;
+				justify-content: center;
+				margin-top:      10px;
+			}
+
+			.button {
+				background-color: rgb(var(--ctp-surface1-rgb));
+				color:            rgb(var(--ctp-text-rgb));
+				border:           3px solid rgb(var(--ctp-surface2-rgb));
+				padding:          8px 24px;
+				border-radius:    12px;
+				font:             800 0.9rem sans-serif;
+				display:          inline-block;
+				transform:        skewX(-20deg);
+				box-shadow:       3px 3px 0 rgb(var(--ctp-crust-rgb));
+				transition:       all       0.2s ease,
+				                  transform 0.15s cubic-bezier(0.35, 1.55, 0.65, 1);
+
+				& > span {
+					display:     inline-flex;
+					align-items: center;
+					gap:         8px;
+					transform:   skewX(20deg);
+				}
+
+				&.important {
+					background-color: rgb(var(--ctp-peach-rgb));
+					border-color:     rgb(var(--ctp-peach-rgb));
+					color:            rgb(var(--ctp-crust-rgb));
+				}
+
+				&:hover {
+					border-color: rgb(var(--ctp-peach-rgb));
+					transform:    skewX(-20deg) translateY(-2px);
+					box-shadow:   1px 1px 0 rgb(var(--ctp-peach-rgb)),
+					              2px 2px 0 rgb(var(--ctp-peach-rgb)),
+					              3px 3px 0 rgb(var(--ctp-peach-rgb));
+				}
+
+				&:active {
+					transform:  skewX(-20deg) translateY(2px);
+					box-shadow: 1px 1px 0 rgb(var(--ctp-crust-rgb));
+				}
+			}
+
+			&:hover {
+				transform: translateY(-5px);
+
+				.status-tab {
+					background-color: rgb(var(--ctp-red-rgb));
+					border-color:     rgb(var(--ctp-red-rgb));
+					color:            rgb(var(--ctp-crust-rgb));
+				}
+
+				#status-title {
+					color: rgb(var(--ctp-red-rgb));
+				}
+
+				.status-icon-box {
+					transform: scale(1.1) rotate(-5deg);
+				}
+
+				.status-body {
+					border-color: rgb(var(--ctp-red-rgb));
+					box-shadow:   1px 1px 0 rgb(var(--ctp-red-rgb)),
+					              2px 2px 0 rgb(var(--ctp-red-rgb)),
+					              3px 3px 0 rgb(var(--ctp-red-rgb)),
+					              4px 4px 0 rgb(var(--ctp-red-rgb)),
+					              5px 5px 0 rgb(var(--ctp-red-rgb));
+				}
+			}
+
+			&:active:not(:has(.button:active)) {
+				transform: translateY(+3px);
+
+				.status-body {
+					box-shadow: 1px 1px 0 rgb(var(--ctp-red-rgb)),
+					            2px 2px 0 rgb(var(--ctp-red-rgb));
+				}
+			}
+		}
+
+		/* =============== ANIMATIONS =============== */
+		@keyframes pop-in {
+			from {
+				opacity:   0;
+				transform: scale(0.9) translateY(15px);
+			}
+			to {
+				opacity:   1;
+				transform: scale(1) translateY(0);
+			}
+		}
+
+		@keyframes rotate {
+			from { rotate: 0deg;   }
+			to   { rotate: 360deg; }
+		}
+
+	@keyframes wave {
+		0%   { transform: rotate(0deg)    skewX(0deg)     translateY(0px);   }
+		25%  { transform: rotate(0.9deg)  skewX(-0.4deg)  translateY(1.5px); }
+		50%  { transform: rotate(-0.6deg) skewX(0.3deg)   translateY(0.5px); }
+		75%  { transform: rotate(0.3deg)  skewX(-0.15deg) translateY(2px);   }
+		100% { transform: rotate(0deg)    skewX(0deg)     translateY(0px);   }
+	}
+	</style>
+</head>
+
+<body oncontextmenu="return false">
+	<div class="content">
+		<object class="construction-svg" data="https://nyxie.nekoweb.org/assets/construction-vecteezy.svg" type="image/svg+xml"></object>
+		<p      id   ="status-code">404</p>
+
+		<div class="status-card">
+			<div class="status-tab hazard-stripe">
+				<span id="tab-text"><i class="fas fa-triangle-exclamation"></i>Site 404</span>
+			</div>
+
+			<div class="status-body">
+				<div class="status-icon-box">
+					<i class="fas fa-compass"></i>
+				</div>
+
+				<h1 id="status-title">This Area is off-limits</h1>
+				<p id="status-description">
+					The image, folder, or page you are trying to view has been deconstructed or is yet to be built
+				</p>
+
+				<div class="button-group">
+					<a href="https://nyxie.nekoweb.org" class="button important">
+						<span><i class="fas fa-house"></i>Leave Area</span>
+					</a>
+					<a href="javascript:history.back()" class="button">
+						<span><i class="fas fa-arrow-left"></i>Turn Back</span>
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>
