@@ -12,11 +12,11 @@
 
 ## How It Works
 ```
-┌─────────────────────────┐          GitHub Actions           ┌─────────────────────────┐
-│   Source Repository     │  ───────────────────────────────► │   Target Repository     │
-│   (e.g., Gallery Repo)  │     (Filters, transforms,         │   (nyxie.nekoweb.org)   │
-│   + nekoweb.json        │      and moves files)             │                         │
-└─────────────────────────┘                                   └─────────────────────────┘
+┌─────────────────────────┐                                 ┌─────────────────────────┐
+│   Source Repository     │          GitHub Actions         │    Target Repository    │
+│   (e.g. Gallery Repo)   │  ─────────────────────────────► │   (nyxie.nekoweb.org)   │
+│      +nekoweb.json      │   *Filters, transforms, moves   │ (The GitHub Repository) │
+└─────────────────────────┘                                 └─────────────────────────┘
 ```
 
 > [!IMPORTANT]  
@@ -38,10 +38,12 @@ This allows you to exclude files, move/rename assets, and replace URLs in the mi
     ".git",
     ".github",
     "readme*",
+    "!Backup",
+    "!Plugin",
     "license*",
     ".gitignore",
-    "assets/images/image?*",
-    "assets/nekoweb/"
+    "assets/nekoweb/",
+    "assets/images/image?*"
   ],
   "renames": {
     "404.html": "not_found.html"
