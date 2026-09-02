@@ -56,7 +56,9 @@ This allows you to exclude files, move/rename assets, and replace URLs in the mi
     "https://imduck42.github.io/Gallery/assets/cli"                      : "https://nyxie.nekoweb.org/assets/cli",
     "https://imduck42.github.io/Gallery/server.py"                       : "https://nyxie.nekoweb.org/server.py",
     "https://imduck42.github.io/Gallery/"                                : "https://nyxie.nekoweb.org",
-    "imduck42.github.io/Gallery"                                         : "nyxie.nekoweb.org"
+    "imduck42.github.io/Gallery"                                         : "nyxie.nekoweb.org",
+    "__(•)>"                                                             : " /\\_/\\ ",
+    "\\___) "                                                            : "(=^.^=)"
   }
 }
 ```
