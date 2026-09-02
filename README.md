@@ -51,7 +51,7 @@ This allows you to exclude files, move/rename assets, and replace URLs in the mi
   "replacements": {
     "https://raw.githubusercontent.com/ImDuck42/Gallery/main/server.py": "https://nyxie.nekoweb.org/server.py",
     "https://imduck42.github.io/Gallery/assets/gallery-svgrepo.svg"    : "https://nyxie.nekoweb.org/assets/images/construction-vecteezy.svg",
-    "https://imduck42.github.io/Gallery/assets/images/FoaOhVoah.png"   : "https://nyxie.nekoweb.org/assets/images/FoaOhVoah.png.png",
+    "https://imduck42.github.io/Gallery/assets/images/voahOhVoah.png"  : "https://nyxie.nekoweb.org/assets/images/voahOhVoah.png.png",
     "https://imduck42.github.io/Gallery/assets/images/image.png"       : "https://nyxie.nekoweb.org/assets/images/image.png",
     "https://imduck42.github.io/Gallery/assets/cli"                    : "https://nyxie.nekoweb.org/assets/cli",
     "https://imduck42.github.io/Gallery/"                              : "https://nyxie.nekoweb.org",
