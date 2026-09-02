@@ -5,8 +5,8 @@
 
 > **The central repository for [nyxie.nekoweb.org](https://nyxie.nekoweb.org)**
 
-> This repository is designed to be the target destination for your projects  
-> Using the custom [Mirror Workflow](./sourceWorkflow/mirror.yml), you can automatically sync and transform content from any source repository directly into this one
+> This repository is designed to be the target destination for my projects,  
+> Using the custom [Mirror Workflow](./sourceWorkflow/mirror.yml), you can automatically sync and transform content from any source repository to a NekoWeb compatible version
 
 ---
 
