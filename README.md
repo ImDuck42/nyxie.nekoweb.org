@@ -42,7 +42,7 @@ This allows you to exclude files, move/rename assets, and replace URLs in the mi
     "!Plugin",
     "license*",
     ".gitignore",
-    "assets/nekoweb/",
+    "assets/nekoweb",
     "assets/images/image?*.png"
   ],
   "renames": {
