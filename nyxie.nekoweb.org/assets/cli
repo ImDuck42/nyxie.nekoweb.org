@@ -43,7 +43,7 @@ init_colors() {
 cleanup_and_exit() {
   printf "\n\n"
   printf "  ${MOCHA_PEACH}${CLR_BOLD} /\_/\  ${MOCHA_LAVENDER}Byee!${CLR_RESET}\n"
-  printf "  ${MOCHA_PEACH}${CLR_BOLD}(=^.^=)  ${MOCHA_LAVENDER}See you next time${CLR_RESET}\n"
+  printf "  ${MOCHA_PEACH}${CLR_BOLD}(=^.^=) ${MOCHA_LAVENDER}See you next time${CLR_RESET}\n"
   exit 0
 }
 trap cleanup_and_exit INT
@@ -390,7 +390,7 @@ main_menu() {
     ui_menu_row "1" "$MOCHA_MAUVE"    "Quick Start"     "Launch server & open gallery"   "[path]"  "$MOCHA_OVERLAY"
     ui_menu_row "2" "$MOCHA_BLUE"     "Download Server" "Save server.py to local folder" "[path]"  "$MOCHA_OVERLAY"
     ui_menu_row "3" "$MOCHA_SAPPHIRE" "Open Website"    "Launch browser interface"       " /\_/\ "  "$MOCHA_PEACH"
-    ui_menu_row "0" "$MOCHA_RED"      "Exit"            "Close CLI launcher"             "(=^.^=) "  "$MOCHA_PEACH" "$MOCHA_SUBTEXT"
+    ui_menu_row "0" "$MOCHA_RED"      "Exit"            "Close CLI launcher"             "(=^.^=)"  "$MOCHA_PEACH" "$MOCHA_SUBTEXT"
     ui_menu_footer
 
     printf "  ${MOCHA_MAUVE}╭─[${MOCHA_LAVENDER} gallery@$(pwd) ${MOCHA_MAUVE}]${CLR_RESET}\n"
