@@ -1,35 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="5000" height="3000" viewBox="0 0 5000 3000" fill="url(#hazardPattern)">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 5000 3000" fill="url(#hazardPattern)">
 
   <!-- ========== ANIMATION PATTERN ========== -->
   <defs>
     <pattern id="hazardPattern" width="1200" height="3000" patternUnits="userSpaceOnUse">
-      <rect width="1200" height="3000" fill="#000000" />
+      <rect                     width="1200" height="3000"                fill="#000000"                />
+      <polygon points="1200,0 0,1500 1200,3000 1800,3000 600,1500 1800,0" fill="#f9e2af" opacity="0.75" />
+
+      <!--
       <g    id   ="pattern-colors"     fill="#f9e2af" opacity="0.75">
-        <!-- ========== STRIPE 1 (//) ========== -->
-        <!-- Segment 1A (Main body) -->
+        <!- - ========== STRIPE 1 (//) ========== - ->
+        <!- - Segment 1A (Main body) - ->
         <path d="
           M 1200,0 1700,0 25,2093.75 -225,1781.25  Z
           M 2400,0 2900,0 1225,2093.75 975,1781.25 Z
           M 0,0 500,0 -1175,2093.75 -1425,1781.25  Z" />
-        <!-- Segment 1B (Detached Wing) -->
+        <!- - Segment 1B (Detached Wing) - ->
         <path d="
           M 610,2237.5 860,2550 625,2843.75 375,2531.25     Z
           M -590,2237.5 -340,2550 -575,2843.75 -825,2531.25 Z
           M 1810,2237.5 2060,2550 1825,2843.75 1575,2531.25 Z" />
 
-        <!-- ========== STRIPE 2 (\\) ========== -->
-        <!-- Segment 2A (Main body) -->
+        <!- - ========== STRIPE 2 (\\) ========== - ->
+        <!- - Segment 2A (Main body) - ->
         <path d="
           M 1200,3000 1700,3000 25,906.25 -225,1218.75  Z
           M 2400,3000 2900,3000 1225,906.25 975,1218.75 Z
           M 0,3000 500,3000 -1175,906.25 -1425,1218.75  Z" />
-        <!-- Segment *2B* (Detached Wing) -->
+        <!- - Segment *2B* (Detached Wing) - ->
         <path d="
           M 610,762.5 860,450 625,156.25 375,468.75     Z
           M -590,762.5 -340,450 -575,156.25 -825,468.75 Z
           M 1810,762.5 2060,450 1825,156.25 1575,468.75 Z" />
       </g>
+      -->
 
       <animateTransform
         attributeName="patternTransform"
