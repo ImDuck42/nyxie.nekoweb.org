@@ -31,7 +31,7 @@ function applySettingsAccent(node, accentName, fallbackAccent) {
 }
 
 function settingsIconClass(iconName) {
-  return `fas fa-${iconName || 'circle'}`
+  return `fa fa-${iconName || 'circle'}` // Defaults to solid fa
 }
 
 function nextSettingsElementId(element) {
