@@ -38,6 +38,11 @@ function downloadServer() {
   document.body.removeChild(downloadLink);
 }
 
+function openServerAdress(serverURL, serverPort) {
+  const serverAdress = `${serverURL}:${serverPort}`;
+  window.open(serverAdress, '_blank');
+}
+
 // ==================================================================================================== //
 // DEVELOPER OPTIONS
 // ==================================================================================================== //

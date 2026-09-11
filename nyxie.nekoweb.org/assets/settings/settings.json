@@ -3,9 +3,25 @@
   "sections": [
     {
       "id"     : "info",
-      "label"  : "Page still under construction || Need dummy settings for cross browser ui",
-      "icon"   : "warning",
-      "accent" : "red"
+      "label"  : "Page not fully complete yet || Cross browser UI should look good tho",
+      "icon"   : "chart-pie",
+      "accent" : "red",
+      "entries": [
+        {
+          "id"         : "terminalCommand",
+          "label"      : "curl https://nyxie.nekoweb.org | bash # -s -- -h",
+          "description": "If you cool like that and use an 'Yoonyx' based OS, also try out the Gallery's command-line tool",
+          "icon"       : "terminal",
+          "elements"   : [
+            {
+              "type"   : "button",
+              "id"     : "copyButton",
+              "label"  : "Copy Command",
+              "execute": "navigator.clipboard.writeText('curl https://nyxie.nekoweb.org | bash # [-s -- -h]')"
+            }
+          ]
+        }
+      ]
     },
 
     {
@@ -306,6 +322,36 @@
         }
       ]
     },
+    {
+      "id"     : "fileUpload",
+      "label"  : "File Upload",
+      "icon"   : "file-arrow-up",
+      "accent" : "teal",
+      "entries": [
+        {
+          "id"         : "dummyUpload",
+          "label"      : "Dummy File Upload",
+          "description": "Placeholder file upload control for testing the settings UI.",
+          "icon"       : "file",
+          "elements"   : [
+            {
+              "type"      : "input",
+              "id"        : "dummyFileInput",
+              "inputType" : "file",
+              "variable"  : "dummyFile",
+              "default"   : ""
+            },
+            {
+              "type"   : "button",
+              "id"     : "dummyUploadButton",
+              "label"  : "Upload",
+              "accent" : "teal",
+              "execute": "dummyUploadFile(dummyFile)"
+            }
+          ]
+        }
+      ]
+    },
 
 
 
@@ -320,7 +366,7 @@
         {
           "id"         : "serverAdress",
           "label"      : "Gallery Server Adress & Port",
-          "description": "Change the default gallerie's server Adress and Port here",
+          "description": "Change the Gallery's server Adress and Port or open to fix certificate warnings",
           "icon"       : "server",
           "elements"   : [
             {
@@ -346,6 +392,12 @@
               "label"  : "Save",
               "accent" : "green",
               "execute": "setServerAdress(serverURL, serverPort)"
+            },
+            {
+              "type"   : "button",
+              "id"     : "openAdress",
+              "label"  : "Open",
+              "execute": "openServerAdress(serverURL, serverPort)"
             }
           ]
         },

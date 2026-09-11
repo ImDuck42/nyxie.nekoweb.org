@@ -734,6 +734,26 @@ async function loadFoldersFromServer() {
 }
 
 // ==================================================================================================== //
+// NON FIREFOX EXTRA WURST
+// ==================================================================================================== //
+function initRangeProgress() {
+  const update = (element) => {
+    const min   = parseFloat(element.min)   || 0
+    const max   = parseFloat(element.max)   || 100
+    const value = parseFloat(element.value) || 0
+    element.style.setProperty('--progress', `${((value - min) / (max - min)) * 100}%`)
+  }
+
+  document.addEventListener('input', ({ target }) => {
+    if (target.type === 'range') update(target)
+  })
+
+  setTimeout(() => {
+    document.querySelectorAll('input[type="range"]').forEach(update)
+  }, 100)
+}
+
+// ==================================================================================================== //
 // INIT
 // ==================================================================================================== //
 document.addEventListener('DOMContentLoaded', async () => {
@@ -746,6 +766,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   initFullScreenModal()
   enableChipScrollInteractions()
   initInfiniteScroll()
+  initRangeProgress() // Grrr
 
   try {
     await loadFoldersFromServer()
@@ -829,10 +850,11 @@ const contextMenu = () => [
     icon:   'copy',
     accent: 'teal',
     action: () => console.log('Me broken, please do again later') },
-  { label:  'Rename File',
-    icon:   'pen',
-    accent: 'rosewater',
-    action: () => console.log('The file is now called "I Only Wanted To Fix A Single Typo In The Header, But It Broke The Entire User Authentication Pipeline And Now The Production Database Is On Fire"') },
+  { label:    'Rename File',
+    icon:     'pen',
+    disabled: true,
+    accent:   'rosewater',
+    action:   () => console.log('The file is now called "I Only Wanted To Fix A Single Typo In The Header, But It Broke The Entire User Authentication Pipeline And Now The Production Database Is On Fire"') },
   { label:  'View File Metadata',
     icon:   'address-card',
     accent: 'yellow',
