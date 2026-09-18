@@ -42,11 +42,18 @@
   --pill-width:  420px;
 
   /* Miscellaneous */
-  --text-filter:  invert(31%) sepia(54%) saturate(63%) hue-rotate(189deg) brightness(197%) contrast(192%);
+  --border-width: 3px;
+  --font-label:   800 0.85rem sans-serif;
   --cubic-bezier: cubic-bezier(0.35, 1.55, 0.65, 1);
+  --grid-columns: repeat(auto-fill, minmax(250px, 1fr));
+  --text-filter:  invert(31%) sepia(54%) saturate(63%) hue-rotate(189deg) brightness(197%) contrast(192%);
 }
 
 /* =============== GENERAL STYLING =============== */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
 html, body {
   margin:          0;
   height:          100%;
@@ -119,12 +126,11 @@ header {
   display:       flex;
   width:         var(--pill-width);
   height:        var(--pill-height);
-  box-sizing:    border-box;
   border-radius: 100vw;
   overflow:      hidden;
   gap:           5px;
 	margin-top:    10px;
-  border:        3px solid rgb(var(--ctp-surface2-rgb));
+  border:        var(--border-width) solid rgb(var(--ctp-surface2-rgb));
 
 	.tab {
     width:            100%;
@@ -139,7 +145,6 @@ header {
     display:          flex;
     align-items:      center;
     justify-content:  center;
-    box-sizing:       border-box;
 
 		&.active {
 			background-color: rgb(var(--ctp-mauve-rgb));
@@ -163,9 +168,8 @@ header {
   align-items:      center;
   width:            var(--pill-width);
   height:           var(--pill-height);
-  box-sizing:       border-box;
   margin-top:       10px;
-  border:           3px solid rgb(var(--ctp-surface2-rgb));
+  border:           var(--border-width) solid rgb(var(--ctp-surface2-rgb));
   border-radius:    100vw;
   background-color: rgb(var(--ctp-surface0-rgb));
   padding:          0 12px;
@@ -234,12 +238,11 @@ header {
   position:         relative;
   display:          flex;
   height:           var(--pill-height);
-  box-sizing:       border-box;
   margin-top:       10px;
   border-radius:    100vw;
   overflow:         hidden;
   background-color: rgb(var(--ctp-surface0-rgb));
-  border:           3px solid rgb(var(--ctp-surface1-rgb));
+  border:           var(--border-width) solid rgb(var(--ctp-surface1-rgb));
 
   .sort-slider {
     position:   absolute;
@@ -267,7 +270,6 @@ header {
     transition:  color 0.25s ease;
     display:     flex;
     align-items: center;
-    box-sizing:  border-box;
 
     &.active {
       color:       rgb(var(--ctp-surface0-rgb));
@@ -283,10 +285,10 @@ header {
   }
 }
 
-/* =============== GALLERY GRID =============== */
+/* =============== FOLDER GRID =============== */
 .folder-grid {
   display:               grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  grid-template-columns: var(--grid-columns);
   gap:                   30px;
   padding:               25px;
 }
@@ -318,7 +320,7 @@ header {
   .folder-body {
     background-color: rgb(var(--ctp-surface0-rgb));
     border:           4px solid rgb(var(--ctp-surface1-rgb));
-    border-radius:    0 18px 18px 18px;
+    border-radius:    2px 18px 18px 18px; /* 2px to hide the spiky corner */
     padding:          15px;
     display:          flex;
     flex-direction:   column;
@@ -332,9 +334,8 @@ header {
     height:           150px;
     border-radius:    12px;
     overflow:         hidden;
-    border:           3px solid rgb(var(--ctp-surface1-rgb));
+    border:           var(--border-width) solid rgb(var(--ctp-surface1-rgb));
     background-color: rgb(var(--ctp-mantle-rgb));
-    box-sizing:       border-box;
 
     img {
       width:           100%;
@@ -365,7 +366,7 @@ header {
   }
 
   .folder-size {
-    border:           3px solid rgb(var(--accent));
+    border:           var(--border-width) solid rgb(var(--accent));
     background-color: rgb(var(--ctp-crust-rgb));
     color:            rgb(var(--accent));
     font:             800 0.75rem sans-serif;
@@ -452,10 +453,10 @@ header {
       .chip {
         background-color: rgb(var(--ctp-surface0-rgb));
         color:            rgb(var(--ctp-subtext0-rgb));
-        border:           3px solid rgb(var(--ctp-surface1-rgb));
+        border:           var(--border-width) solid rgb(var(--ctp-surface1-rgb));
         padding:          6px 20px;
         border-radius:    10px;
-        font:             800 0.85rem sans-serif;
+        font:             var(--font-label);
         cursor:           pointer;
         transition:       all 0.2s ease;
         display:          inline-block;
@@ -495,8 +496,8 @@ header {
     .image-count {
       color:            rgb(var(--ctp-text-rgb));
       background-color: rgb(var(--ctp-surface0-rgb));
-      border:           3px solid rgb(var(--ctp-mauve-rgb));
-      font:             800 0.85rem sans-serif;
+      border:           var(--border-width) solid rgb(var(--ctp-mauve-rgb));
+      font:             var(--font-label);
       padding:          6px 14px;
       border-radius:    10px;
       flex-shrink:      0;
@@ -518,12 +519,12 @@ header {
     padding:               10px 13px 13px 10px; /* Account for largest(3px) box-shadow */
     gap:                   20px;
     display:               grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-template-columns: var(--grid-columns);
     grid-auto-rows:        1px;
 
     .gallery-card {
       background-color: rgb(var(--ctp-surface0-rgb));
-      border:           3px solid rgb(var(--ctp-surface1-rgb));
+      border:           var(--border-width) solid rgb(var(--ctp-surface1-rgb));
       border-radius:    18px;
       overflow:         hidden;
       cursor:           pointer;
@@ -633,7 +634,7 @@ header {
     gap:              15px;
     padding:          15px 20px;
     background-color: rgb(var(--ctp-surface0-rgb));
-    border:           3px solid rgb(var(--ctp-surface1-rgb));
+    border:           var(--border-width) solid rgb(var(--ctp-surface1-rgb));
     border-radius:    18px;
     box-shadow:       4px 4px 0 rgb(var(--ctp-crust-rgb));
     transition:       all       0.2s ease,
@@ -663,7 +664,7 @@ header {
       height:           42px;
       border-radius:    10px;
       background-color: rgb(var(--ctp-mantle-rgb));
-      border:           3px solid rgb(var(--accent));
+      border:           var(--border-width) solid rgb(var(--accent));
       color:            rgb(var(--accent));
       font-size:        1.1rem;
       transition:       transform 0.2s var(--cubic-bezier);
@@ -723,10 +724,9 @@ header {
       position:         relative;
       width:            32px;
       height:           32px;
-      box-sizing:       border-box;
       border-radius:    10px;
       background-color: rgb(var(--ctp-surface1-rgb));
-      border:           3px solid rgb(var(--ctp-surface2-rgb));
+      border:           var(--border-width) solid rgb(var(--ctp-surface2-rgb));
       display:          flex;
       align-items:      center;
       justify-content:  center;
@@ -771,10 +771,9 @@ header {
       position:         relative;
       width:            50px;
       height:           28px;
-      box-sizing:       border-box;
       border-radius:    100vw;
       background-color: rgb(var(--ctp-surface1-rgb));
-      border:           3px solid rgb(var(--ctp-surface2-rgb));
+      border:           var(--border-width) solid rgb(var(--ctp-surface2-rgb));
       transition:       all 0.2s ease;
     }
  
@@ -800,10 +799,9 @@ header {
 
   /* text / number / date / slider / picker / file */
   .input {
-    min-width:        50px;
     padding:          8px 12px;
     background-color: rgb(var(--ctp-crust-rgb));
-    border:           3px solid rgb(var(--ctp-surface2-rgb));
+    border:           var(--border-width) solid rgb(var(--ctp-surface2-rgb));
     border-radius:    10px;
     color:            rgb(var(--ctp-text-rgb));
     font:             700 0.9rem sans-serif;
@@ -814,7 +812,7 @@ header {
     user-select:      text;
 
     &[type="range"] {      
-      background-color: var(--ctp-crust-rgb);
+      background-color: transparent;
       appearance:       none;
       border:           none;
       
@@ -833,7 +831,7 @@ header {
         background-color: rgb(var(--ctp-crust-rgb));
         border-color:     rgb(var(--accent));
         border-radius:    8px;
-        border:           3px solid rgb(var(--accent));
+        border:           var(--border-width) solid rgb(var(--accent));
       }
       /* Everything else */
       &::-webkit-slider-runnable-track {
@@ -851,7 +849,7 @@ header {
       &::-webkit-slider-thumb {
         appearance:       none;
         background-color: rgb(var(--ctp-crust-rgb));
-        border:           3px solid rgb(var(--accent));
+        border:           var(--border-width) solid rgb(var(--accent));
         border-radius:    8px;
         width:            20px;
         height:           20px;
@@ -919,7 +917,7 @@ header {
       padding:          6px 18px;
       color:            rgb(var(--accent));
       background-color: rgb(var(--ctp-surface1-rgb));
-      border:           3px solid rgb(var(--ctp-surface2-rgb));
+      border:           var(--border-width) solid rgb(var(--ctp-surface2-rgb));
       border-radius:    10px;
       transition:       all 0.15s ease; 
 
@@ -945,7 +943,7 @@ header {
       margin-top:       5px;
       padding:          6px;
       background-color: rgb(var(--ctp-surface1-rgb));
-      border:           3px solid rgb(var(--ctp-surface2-rgb));
+      border:           var(--border-width) solid rgb(var(--ctp-surface2-rgb));
       border-radius:    10px;
       opacity:          0;
       visibility:       hidden;
@@ -1007,10 +1005,10 @@ header {
   .button {
     padding:          8px 20px;
     background-color: rgb(var(--ctp-surface1-rgb));
-    border:           3px solid rgb(var(--accent));
+    border:           var(--border-width) solid rgb(var(--accent));
     border-radius:    10px;
     color:            rgb(var(--accent));
-    font:             800 0.85rem sans-serif;
+    font:             var(--font-label);
     cursor:           pointer;
     box-shadow:       3px 3px 0 rgb(var(--ctp-crust-rgb));
     transition:       all 0.25s var(--cubic-bezier);
@@ -1047,7 +1045,7 @@ header {
   z-index:          1; /* Above da full-screen modal */
   padding:          6px;
   background-color: rgb(var(--ctp-surface0-rgb));
-  border:           3px solid rgb(var(--ctp-surface1-rgb));
+  border:           var(--border-width) solid rgb(var(--ctp-surface1-rgb));
   border-radius:    12px;
   box-shadow:       2px 2px 5px rgb(var(--ctp-crust-rgb));
   transition:       all 0.15s var(--cubic-bezier);
@@ -1067,7 +1065,7 @@ header {
     background:    none;
     border:        none;
     color:         rgb(var(--ctp-text-rgb));
-    font:          800 0.85rem sans-serif;
+    font:          var(--font-label);
     border-radius: 8px;
     cursor:        pointer;
     transition:    all 0.15s ease;
@@ -1109,10 +1107,10 @@ header {
   }
 }
 
-/* =============== Animations =============== */
+/* =============== ANIMATIONS =============== */
 @keyframes marquee-loop {
-  0%   { transform: translateX(0); }
-  10%  { transform: translateX(0); }
+  0%   { transform: translateX(0);                                 }
+  10%  { transform: translateX(0);                                 }
   90%  { transform: translateX(calc(-100% + var(--marquee-room))); }
   100% { transform: translateX(calc(-100% + var(--marquee-room))); }
 }
@@ -1125,5 +1123,20 @@ header {
   to {
     opacity:   1;
     transform: scale(1);
+  }
+}
+
+/* =============== MINIMUM EFFORT MOBILE ADJUSTMENTS =============== */
+@media (max-width: 768px) {
+  body {
+    user-select: text;
+  }
+  header {
+    flex-direction: column;
+    align-items:    center;
+
+    & > * {
+      max-width: calc(100% - 20px);
+    }
   }
 }
