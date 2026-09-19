@@ -61,7 +61,7 @@ def find_image_folders(root):
   return folders
 
 def accent_for_folder(folder_name):
-  digest = hashlib.sha1(folder_name.encode("utf-8")).hexdigest()
+  digest = hashlib.sha1(folder_name.encode("utf-8"), usedforsecurity=False).hexdigest()
   return ACCENT_NAMES[int(digest, 16) % len(ACCENT_NAMES)]
 
 def build_folder_manifest(folders):

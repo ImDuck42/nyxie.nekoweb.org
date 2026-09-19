@@ -320,7 +320,7 @@ header {
   .folder-body {
     background-color: rgb(var(--ctp-surface0-rgb));
     border:           4px solid rgb(var(--ctp-surface1-rgb));
-    border-radius:    2px 18px 18px 18px; /* 2px to hide the spiky corner */
+    border-radius:    2px 18px 18px; /* 2px to hide the spiky corner */
     padding:          15px;
     display:          flex;
     flex-direction:   column;
@@ -829,9 +829,8 @@ header {
       }
       &::-moz-range-thumb {
         background-color: rgb(var(--ctp-crust-rgb));
-        border-color:     rgb(var(--accent));
-        border-radius:    8px;
         border:           var(--border-width) solid rgb(var(--accent));
+        border-radius:    8px;
       }
       /* Everything else */
       &::-webkit-slider-runnable-track {
