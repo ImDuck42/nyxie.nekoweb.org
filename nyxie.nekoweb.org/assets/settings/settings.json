@@ -9,7 +9,7 @@
       "entries": [
         {
           "id"         : "terminalCommand",
-          "label"      : "curl https://nyxie.nekoweb.org | bash # -s -- -h",
+          "label"      : "curl https://nyxie.nekoweb.org/ | bash # -s -- -h",
           "description": "If you cool like that and use an 'Yoonyx' based OS, also try out the Gallery's command-line tool",
           "icon"       : "terminal",
           "elements"   : [
@@ -17,7 +17,7 @@
               "type"   : "button",
               "id"     : "copyButton",
               "label"  : "Copy Command",
-              "execute": "navigator.clipboard.writeText('curl https://nyxie.nekoweb.org | bash # [-s -- -h]')"
+              "execute": "navigator.clipboard.writeText('curl https://nyxie.nekoweb.org/ | bash # [-s -- -h]')"
             }
           ]
         }

@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 # ==============================================================================
 #  ImDuck42 / Gallery - CLI Runner
-#  - curl https://nyxie.nekoweb.org | bash
-#  - curl https://nyxie.nekoweb.org | bash -s -- -h
+#  - curl https://nyxie.nekoweb.org/ | bash
+#  - curl https://nyxie.nekoweb.org/ | bash -s -- -h
+# An identical version can be found at: https://nyxie.nekoweb.org/assets/cli
 # ==============================================================================
 
 # -- CONFIGURATION -------------------------------------------------------------
@@ -10,7 +11,7 @@ HTTP_PORT="${HTTP_PORT:-${PORT:-4269}}"
 HTTPS_PORT="${HTTPS_PORT:-4270}"
 HOST="${HOST:-}"
 
-SITE_URL="https://nyxie.nekoweb.org"
+SITE_URL="https://nyxie.nekoweb.org/"
 SERVER_PY="https://nyxie.nekoweb.org/server.py"
 
 # -- STYLING & COLORS ----------------------------------------------------------
@@ -344,8 +345,8 @@ open_web_app() {
 show_help() {
   print_banner
   printf "  ${MOCHA_MAUVE}${CLR_BOLD}Usage:${CLR_RESET}\n"
-  printf "    ${MOCHA_GREEN}curl https://nyxie.nekoweb.org | bash ${CLR_RESET}\n"
-  printf "    ${MOCHA_GREEN}curl https://nyxie.nekoweb.org | bash${CLR_RESET} ${MOCHA_TEAL}-s -- [OPTION]${CLR_RESET} ${MOCHA_PEACH}[ARGUMENT]${CLR_RESET}\n\n"
+  printf "    ${MOCHA_GREEN}curl https://nyxie.nekoweb.org/ | bash ${CLR_RESET}\n"
+  printf "    ${MOCHA_GREEN}curl https://nyxie.nekoweb.org/ | bash${CLR_RESET} ${MOCHA_TEAL}-s -- [OPTION]${CLR_RESET} ${MOCHA_PEACH}[ARGUMENT]${CLR_RESET}\n\n"
   printf "  ${MOCHA_MAUVE}${CLR_BOLD}Options:${CLR_RESET}\n"
   printf "    ${MOCHA_TEAL}-s, --start    ${MOCHA_PEACH}[path]${CLR_RESET}  ${MOCHA_TEXT}Start server in ${MOCHA_PEACH}[path]${MOCHA_TEXT} (or ./) & open site${CLR_RESET}\n"
   printf "    ${MOCHA_TEAL}-d, --download ${MOCHA_PEACH}[path]${CLR_RESET}  ${MOCHA_TEXT}Download server.py into ${MOCHA_PEACH}[path]${MOCHA_TEXT} (or ./)${CLR_RESET}\n"
