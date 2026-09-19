@@ -43,22 +43,21 @@ This allows you to exclude files, move/rename assets, and replace URLs in the mi
     "license*",
     ".gitignore",
     "assets/nekoweb",
-    "assets/images/image?*.png"
+    "assets/images/CLIHelp.png",
+    "assets/images/404Preview.png",
+    "assets/images/CLIPreview.png",
+    "assets/images/FullscreenPreview.png"
   ],
   "renames": {
-    "404.html": "not_found.html"
+    "404.html"      : "not_found.html",
+    "CLINekoWeb.png": "CLIPreview.png"
   },
   "replacements": {
-    "https://imduck42.github.io/Gallery/assets/construction-vecteezy.svg": "https://nyxie.nekoweb.org/assets/construction-vecteezy.svg",
-    "https://imduck42.github.io/Gallery/assets/images/voahOhVoah.png"    : "https://nyxie.nekoweb.org/assets/images/voahOhVoah.png",
-    "https://imduck42.github.io/Gallery/assets/gallery-svgrepo.svg"      : "https://nyxie.nekoweb.org/assets/gallery-svgrepo.svg",
-    "https://imduck42.github.io/Gallery/assets/images/image.png"         : "https://nyxie.nekoweb.org/assets/images/image.png",
-    "https://imduck42.github.io/Gallery/assets/cli"                      : "https://nyxie.nekoweb.org/assets/cli",
-    "https://imduck42.github.io/Gallery/server.py"                       : "https://nyxie.nekoweb.org/server.py",
-    "https://imduck42.github.io/Gallery/"                                : "https://nyxie.nekoweb.org",
-    "imduck42.github.io/Gallery"                                         : "nyxie.nekoweb.org",
-    "__(•)>"                                                             : " /\\_/\\ ",
-    "\\___) "                                                            : "(=^.^=)"
+    "imduck42.github.io/Gallery": "nyxie.nekoweb.org",
+    "1550846974541168751"       : "1550847478197387294",
+    "__(•)>"                    : " /\\_/\\ ",
+    "\\___) "                   : "(=^.^=)",
+    "GitHub"                    : "NekoWeb"
   }
 }
 ```
