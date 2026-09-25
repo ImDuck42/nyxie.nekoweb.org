@@ -70,6 +70,16 @@ resolve_path() {
   fi
 }
 
+sanitize_url() {
+  if [[ $SITE_URL == */ ]]; then
+    temp=${SITE_URL%/}
+  else
+    temp=$SITE_URL
+  fi
+
+  SANITIZED_URL=${temp#*://}
+}
+
 get_python_cmd() {
   if   command -v python3 >/dev/null 2>&1; then printf "python3\n"
   elif command -v python  >/dev/null 2>&1; then printf "python\n"
@@ -203,7 +213,7 @@ ui_menu_footer() {
 print_banner() {
   clear 2>/dev/null || true
   
-  local link_text="nyxie.nekoweb.org"
+  local link_text=$SANITIZED_URL
   local link="${ESC}]8;;${SITE_URL}${ESC}\\${link_text}${ESC}]8;;${ESC}\\"
   
   # Styling aliases to render ascii art
@@ -385,6 +395,7 @@ parse_args() {
 
 main_menu() {
   while true; do
+    sanitize_url
     print_banner
     
     ui_menu_header "Actions"
